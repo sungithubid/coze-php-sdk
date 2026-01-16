@@ -321,6 +321,16 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+## TODO
+
+- [ ] **Bots** - 智能体管理（创建、发布、获取、列表）
+- [ ] **Conversations** - 会话管理（创建、获取、列表、清除消息）
+- [ ] **Workflows** - 工作流管理（运行、流式运行）
+- [ ] **Workspaces** - 工作空间管理（列表）
+- [ ] **Files** - 文件上传管理（上传、获取）
+- [ ] **Apps** - 应用管理
+- [ ] **Folders** - 文件夹管理
+
 ## Related Links
 
 - [Coze Official Website](https://www.coze.cn)

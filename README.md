@@ -157,6 +157,90 @@ Retrieve chat status.
 
 Cancel a chat.
 
+### Datasets API (Knowledge Base)
+
+#### `$client->datasets->create(array $request): array`
+
+Create a new dataset (knowledge base).
+
+**Parameters:**
+- `name` (string, required): Dataset name
+- `space_id` (string, required): Space ID
+- `format_type` (int, required): 0 = Document, 1 = Spreadsheet, 2 = Image
+- `description` (string, optional): Dataset description
+
+#### `$client->datasets->list(array $request): array`
+
+List datasets in a space.
+
+**Parameters:**
+- `space_id` (string, required): Space ID
+- `page_num` (int, optional): Page number (default: 1)
+- `page_size` (int, optional): Page size (default: 10)
+
+#### `$client->datasets->update(string $datasetId, array $request): array`
+
+Update a dataset.
+
+#### `$client->datasets->delete(string $datasetId): array`
+
+Delete a dataset.
+
+### Documents API (Knowledge Base Files)
+
+#### `$client->datasets->documents->create(array $request): array`
+
+Create documents in a dataset.
+
+```php
+use Coze\Models\DocumentBase;
+
+$client->datasets->documents->create([
+    'dataset_id' => 123456789,
+    'document_bases' => [
+        DocumentBase::buildLocalFile('doc.txt', 'File content here', 'txt'),
+        DocumentBase::buildWebPage('Web Page', 'https://example.com', 24),
+    ],
+    'format_type' => 0,
+]);
+```
+
+#### `$client->datasets->documents->list(array $request): array`
+
+List documents in a dataset.
+
+**Parameters:**
+- `dataset_id` (int, required): Dataset ID
+- `page` (int, optional): Page number (default: 1)
+- `size` (int, optional): Page size (default: 20)
+
+#### `$client->datasets->documents->update(array $request): array`
+
+Update a document.
+
+**Parameters:**
+- `document_id` (int, required): Document ID
+- `document_name` (string, optional): New document name
+
+#### `$client->datasets->documents->delete(array $documentIds): array`
+
+Delete documents.
+
+### DocumentBase Helper Methods
+
+```php
+use Coze\Models\DocumentBase;
+
+// Build from local file content
+$doc = DocumentBase::buildLocalFile('name', 'content', 'txt');
+
+// Build from web page URL
+$doc = DocumentBase::buildWebPage('name', 'https://example.com', 24); // 24h update interval
+
+// Build from image file ID
+$doc = DocumentBase::buildImage('name', $fileId);
+```
+
 ### Message Helper Methods
 
 ```php
@@ -215,6 +299,8 @@ See the [examples](./examples) directory for more usage examples:
 - [Streaming Chat](./examples/chat_stream.php)
 - [Non-Streaming Chat](./examples/chat_no_stream.php)
 - [Polling Chat](./examples/chat_poll.php)
+- [Dataset CRUD](./examples/dataset_crud.php)
+- [Document CRUD](./examples/document_crud.php)
 
 ## Environment Variables
 

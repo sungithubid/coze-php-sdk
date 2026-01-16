@@ -109,8 +109,56 @@ class HttpClient
     public function get(string $path, array $query = [], array $options = []): array
     {
         try {
-            $response = $this->client->get($path, array_merge([
-                RequestOptions::QUERY => $query,
+            $requestOptions = [
+                RequestOptions::HEADERS => $this->auth->getHeaders(),
+            ];
+            if (!empty($query)) {
+                $requestOptions[RequestOptions::QUERY] = $query;
+            }
+
+            $response = $this->client->get($path, array_merge($requestOptions, $options));
+
+            return $this->handleResponse($response);
+        } catch (GuzzleException $e) {
+            throw new CozeException('Request failed: ' . $e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * Send a PUT request
+     *
+     * @param string $path API path
+     * @param array $data Request body data
+     * @param array $options Additional Guzzle options
+     * @return array Decoded response
+     * @throws CozeException
+     */
+    public function put(string $path, array $data = [], array $options = []): array
+    {
+        try {
+            $response = $this->client->put($path, array_merge([
+                RequestOptions::JSON => $data,
+                RequestOptions::HEADERS => $this->auth->getHeaders(),
+            ], $options));
+
+            return $this->handleResponse($response);
+        } catch (GuzzleException $e) {
+            throw new CozeException('Request failed: ' . $e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * Send a DELETE request
+     *
+     * @param string $path API path
+     * @param array $options Additional Guzzle options
+     * @return array Decoded response
+     * @throws CozeException
+     */
+    public function delete(string $path, array $options = []): array
+    {
+        try {
+            $response = $this->client->delete($path, array_merge([
                 RequestOptions::HEADERS => $this->auth->getHeaders(),
             ], $options));
 

@@ -25,7 +25,7 @@ A PHP SDK for the Coze API. This SDK provides a convenient way to integrate Coze
 ## Installation
 
 ```bash
-composer require coze/coze-php-sdk
+composer require sungithubid/coze-php-sdk
 ```
 
 Or add to your `composer.json`:
@@ -33,7 +33,7 @@ Or add to your `composer.json`:
 ```json
 {
     "require": {
-        "coze/coze-php-sdk": "^1.0"
+        "sungithubid/coze-php-sdk": "^1.0"
     }
 }
 ```

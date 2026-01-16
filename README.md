@@ -1,13 +1,15 @@
 # Coze PHP SDK
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![PHP Version](https://img.shields.io/badge/php-%3E%3D8.0-8892BF.svg)](https://www.php.net/)
+[![PHP Version](https://img.shields.io/badge/php-%3E%3D7.4-8892BF.svg)](https://www.php.net/)
 
-The official PHP SDK for the Coze API. This SDK provides a convenient way to integrate Coze's powerful AI capabilities into your PHP applications.
+> ⚠️ **Note:** This is an unofficial third-party PHP SDK. Currently, only the commonly used **Chat** and **Datasets** APIs are implemented. Other APIs will be added gradually.
+
+A PHP SDK for the Coze API. This SDK provides a convenient way to integrate Coze's AI capabilities into your PHP applications.
 
 ## Features
 
-- 🚀 Full support for Coze Open APIs
+- 🚀 PHP SDK for the Coze API
 - 🔐 Personal Access Token (PAT) authentication
 - 📡 Both streaming and non-streaming chat support
 - 🔄 Automatic polling for chat completion
@@ -323,13 +325,13 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## TODO
 
-- [ ] **Bots** - 智能体管理（创建、发布、获取、列表）
-- [ ] **Conversations** - 会话管理（创建、获取、列表、清除消息）
-- [ ] **Workflows** - 工作流管理（运行、流式运行）
-- [ ] **Workspaces** - 工作空间管理（列表）
-- [ ] **Files** - 文件上传管理（上传、获取）
-- [ ] **Apps** - 应用管理
-- [ ] **Folders** - 文件夹管理
+- [ ] **Bots**
+- [ ] **Conversations**
+- [ ] **Workflows**
+- [ ] **Workspaces**
+- [ ] **Files**
+- [ ] **Apps**
+- [ ] **Folders**
 
 ## Related Links
 

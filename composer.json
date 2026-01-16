@@ -1,0 +1,45 @@
+{
+    "name": "coze/coze-php-sdk",
+    "description": "The PHP SDK for the Coze API",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "coze",
+        "api",
+        "sdk",
+        "ai",
+        "bot",
+        "chat"
+    ],
+    "authors": [
+        {
+            "name": "Coze PHP SDK Contributors"
+        }
+    ],
+    "homepage": "https://github.com/coze-dev/coze-php-sdk",
+    "require": {
+        "php": ">=7.4",
+        "guzzlehttp/guzzle": "^7.0",
+        "psr/http-message": "^1.0|^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0|^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Coze\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Coze\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable"
+}

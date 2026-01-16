@@ -60,9 +60,16 @@ class HttpClient
     public function post(string $path, array $data = [], array $options = []): array
     {
         try {
+            // Merge headers properly - don't let options overwrite auth headers
+            $headers = $this->auth->getHeaders();
+            if (isset($options['headers'])) {
+                $headers = array_merge($headers, $options['headers']);
+                unset($options['headers']);
+            }
+
             $response = $this->client->post($path, array_merge([
                 RequestOptions::JSON => $data,
-                RequestOptions::HEADERS => $this->auth->getHeaders(),
+                RequestOptions::HEADERS => $headers,
             ], $options));
 
             return $this->handleResponse($response);

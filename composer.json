@@ -1,5 +1,5 @@
 {
-    "name": "coze/coze-php-sdk",
+    "name": "sungithubid/coze-php-sdk",
     "description": "The PHP SDK for the Coze API",
     "type": "library",
     "license": "MIT",
@@ -16,7 +16,7 @@
             "name": "Coze PHP SDK Contributors"
         }
     ],
-    "homepage": "https://github.com/coze-dev/coze-php-sdk",
+    "homepage": "https://github.com/sungithubid/coze-php-sdk",
     "require": {
         "php": ">=7.4",
         "guzzlehttp/guzzle": "^7.0",

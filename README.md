@@ -159,6 +159,98 @@ Retrieve chat status.
 
 Cancel a chat.
 
+### Conversations API
+
+#### `$client->conversations->create(array $request): array`
+
+Create a new conversation.
+
+**Parameters:**
+- `messages` (array, optional): Initial messages in the conversation
+- `meta_data` (array, optional): Additional metadata
+- `bot_id` (string, optional): Bot ID to bind the conversation
+- `connector_id` (string, optional): Connector ID (999: Chat SDK, 1024: API)
+
+```php
+$response = $client->conversations->create([
+    'bot_id' => 'your_bot_id',
+    'meta_data' => [
+        'user_name' => 'Test User',
+    ],
+]);
+$conversationId = $response['data']['id'];
+```
+
+#### `$client->conversations->retrieve(string $conversationId): array`
+
+Retrieve conversation details.
+
+#### `$client->conversations->list(array $request): array`
+
+List conversations for a bot.
+
+**Parameters:**
+- `bot_id` (string, required): Bot ID
+- `page_num` (int, optional): Page number (default: 1)
+- `page_size` (int, optional): Page size (default: 20)
+
+#### `$client->conversations->clear(string $conversationId): array`
+
+Clear conversation context/history.
+
+### Messages API
+
+#### `$client->conversations->messages->create(array $request): array`
+
+Create a message in a conversation.
+
+**Parameters:**
+- `conversation_id` (string, required): Conversation ID
+- `role` (string, required): Message role ('user' or 'assistant')
+- `content` (string, required): Message content
+- `content_type` (string, required): Content type ('text' or 'object_string')
+- `meta_data` (array, optional): Additional metadata
+
+```php
+$response = $client->conversations->messages->create([
+    'conversation_id' => $conversationId,
+    'role' => 'user',
+    'content' => 'Hello, how are you?',
+    'content_type' => 'text',
+]);
+```
+
+#### `$client->conversations->messages->list(array $request): array`
+
+List messages in a conversation.
+
+**Parameters:**
+- `conversation_id` (string, required): Conversation ID
+- `order` (string, optional): Sorting order ('asc' or 'desc')
+- `chat_id` (string, optional): Filter by chat ID
+- `before_id` (string, optional): Get messages before this ID
+- `after_id` (string, optional): Get messages after this ID
+- `limit` (int, optional): Number of messages (default: 50, max: 50)
+
+#### `$client->conversations->messages->retrieve(string $conversationId, string $messageId): array`
+
+Retrieve a specific message.
+
+#### `$client->conversations->messages->update(array $request): array`
+
+Update a message.
+
+**Parameters:**
+- `conversation_id` (string, required): Conversation ID
+- `message_id` (string, required): Message ID
+- `content` (string, optional): New message content
+- `content_type` (string, optional): New content type
+- `meta_data` (array, optional): New metadata
+
+#### `$client->conversations->messages->delete(string $conversationId, string $messageId): array`
+
+Delete a message.
+
 ### Datasets API (Knowledge Base)
 
 #### `$client->datasets->create(array $request): array`
@@ -301,6 +393,9 @@ See the [examples](./examples) directory for more usage examples:
 - [Streaming Chat](./examples/chat_stream.php)
 - [Non-Streaming Chat](./examples/chat_no_stream.php)
 - [Polling Chat](./examples/chat_poll.php)
+- [Chat with Conversation](./examples/chat_with_conversation.php)
+- [Conversation CRUD](./examples/conversation_crud.php)
+- [Message CRUD](./examples/message_crud.php)
 - [Dataset CRUD](./examples/dataset_crud.php)
 - [Document CRUD](./examples/document_crud.php)
 
@@ -325,8 +420,8 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## TODO
 
+- [x] **Conversations**
 - [ ] **Bots**
-- [ ] **Conversations**
 - [ ] **Workflows**
 - [ ] **Workspaces**
 - [ ] **Files**

@@ -6,6 +6,7 @@ namespace Coze;
 
 use Coze\Auth\AuthInterface;
 use Coze\Chat\ChatClient;
+use Coze\Conversations\ConversationsClient;
 use Coze\Datasets\DatasetsClient;
 use Coze\Http\HttpClient;
 
@@ -43,6 +44,12 @@ class CozeClient
     public $datasets;
 
     /**
+     * Conversations API client
+     * @var ConversationsClient
+     */
+    public $conversations;
+
+    /**
      * Create a new Coze client
      *
      * @param AuthInterface $auth Authentication handler
@@ -59,6 +66,7 @@ class CozeClient
         // Initialize API clients
         $this->chat = new ChatClient($this->httpClient);
         $this->datasets = new DatasetsClient($this->httpClient);
+        $this->conversations = new ConversationsClient($this->httpClient);
     }
 
     /**

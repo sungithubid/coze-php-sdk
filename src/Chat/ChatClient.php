@@ -44,7 +44,14 @@ class ChatClient
     {
         $request['stream'] = false;
 
-        $response = $this->httpClient->post(self::CHAT_PATH, $request);
+        // Extract conversation_id for query parameter
+        $path = self::CHAT_PATH;
+        if (isset($request['conversation_id']) && $request['conversation_id'] !== '') {
+            $path .= '?conversation_id=' . urlencode($request['conversation_id']);
+            unset($request['conversation_id']);
+        }
+
+        $response = $this->httpClient->post($path, $request);
 
         return $response;
     }
@@ -60,7 +67,14 @@ class ChatClient
     {
         $request['stream'] = true;
 
-        $stream = $this->httpClient->postStream(self::CHAT_PATH, $request);
+        // Extract conversation_id for query parameter
+        $path = self::CHAT_PATH;
+        if (isset($request['conversation_id']) && $request['conversation_id'] !== '') {
+            $path .= '?conversation_id=' . urlencode($request['conversation_id']);
+            unset($request['conversation_id']);
+        }
+
+        $stream = $this->httpClient->postStream($path, $request);
 
         $iterator = new StreamIterator($stream);
 

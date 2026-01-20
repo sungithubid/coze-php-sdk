@@ -151,7 +151,8 @@ class Document
             'create_time' => $this->createTime,
             'update_time' => $this->updateTime,
         ], function ($v) {
-            return $v !== null; });
+            return $v !== null;
+        });
     }
 }
 

@@ -29,7 +29,7 @@ class DocumentBase
      * Build document base for local file upload
      *
      * @param string $name Document name
-     * @param string $content File content
+     * @param string $content Raw file content (binary, NOT base64 encoded)
      * @param string $fileType File extension (txt, pdf, doc, docx)
      */
     public static function buildLocalFile(string $name, string $content, string $fileType): self
@@ -37,6 +37,7 @@ class DocumentBase
         return new self($name, [
             'file_base64' => base64_encode($content),
             'file_type' => $fileType,
+            'document_source' => 0,  // 0: Upload local files
         ]);
     }
 

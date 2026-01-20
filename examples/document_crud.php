@@ -31,11 +31,26 @@ try {
     echo "1. Creating documents...\n";
 
     // Create a document from local file content
+    $filePath = 'test1.pdf';
+    if (!file_exists($filePath)) {
+        die("错误：文件不存在");
+    }
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mimeType = finfo_file($finfo, $filePath);
+    finfo_close($finfo);
+
+    echo $mimeType . "\n";
+    if ($mimeType !== 'application/pdf') {
+        die("错误：该文件不是有效的 PDF 文件，检测到的类型为：$mimeType");
+    }
+
+    $fileData = file_get_contents($filePath);
+    // Note: Don't pre-encode with base64, buildLocalFile handles encoding internally
     $documentBases = [
         DocumentBase::buildLocalFile(
-            'Test Document',
-            'This is the content of the test document. It can be any text content.',
-            'txt'
+            'test1',
+            $fileData,  // Raw file content, NOT base64 encoded
+            'pdf'
         ),
     ];
 

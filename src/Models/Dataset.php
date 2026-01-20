@@ -52,21 +52,22 @@ class Dataset
     public $updateTime;
 
     public function __construct(
-        string $id,
-        string $name,
-        string $description = '',
-        string $spaceId = '',
-        int $status = 1,
-        int $formatType = 0,
-        bool $canEdit = true,
+        string  $id,
+        string  $name,
+        string  $description = '',
+        string  $spaceId = '',
+        int     $status = 1,
+        int     $formatType = 0,
+        bool    $canEdit = true,
         ?string $iconUrl = null,
-        int $docCount = 0,
-        int $hitCount = 0,
-        int $sliceCount = 0,
+        int     $docCount = 0,
+        int     $hitCount = 0,
+        int     $sliceCount = 0,
         ?string $allFileSize = null,
-        ?int $createTime = null,
-        ?int $updateTime = null
-    ) {
+        ?int    $createTime = null,
+        ?int    $updateTime = null
+    )
+    {
         $this->id = $id;
         $this->name = $name;
         $this->description = $description;
@@ -127,7 +128,8 @@ class Dataset
             'create_time' => $this->createTime,
             'update_time' => $this->updateTime,
         ], function ($v) {
-            return $v !== null; });
+            return $v !== null;
+        });
     }
 }
 
@@ -138,17 +140,4 @@ class DatasetStatus
 {
     public const ENABLED = 1;
     public const DISABLED = 3;
-}
-
-/**
- * Document format type constants
- */
-class DocumentFormatType
-{
-    /** Document type (txt, pdf, web pages) */
-    public const DOCUMENT = 0;
-    /** Spreadsheet type (xls) */
-    public const SPREADSHEET = 1;
-    /** Image type (png) */
-    public const IMAGE = 2;
 }

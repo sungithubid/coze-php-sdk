@@ -9,6 +9,13 @@ namespace Coze\Models;
  */
 class Message
 {
+    // Message type constants
+    public const TYPE_ANSWER = 'answer';
+    public const TYPE_FUNCTION_CALL = 'function_call';
+    public const TYPE_TOOL_RESPONSE = 'tool_response';
+    public const TYPE_FOLLOW_UP = 'follow_up';
+    public const TYPE_VERBOSE = 'verbose';
+    public const TYPE_QUESTION = 'question';
     /** @var string */
     public $role;
 
@@ -42,6 +49,9 @@ class Message
     /** @var int|null */
     public $updatedAt;
 
+    /** @var string|null Reasoning content for deep thinking models */
+    public $reasoningContent;
+
     public function __construct(
         string $role,
         string $type,
@@ -53,7 +63,8 @@ class Message
         ?string $chatId = null,
         ?array $metaData = null,
         ?int $createdAt = null,
-        ?int $updatedAt = null
+        ?int $updatedAt = null,
+        ?string $reasoningContent = null
     ) {
         $this->role = $role;
         $this->type = $type;
@@ -66,6 +77,7 @@ class Message
         $this->metaData = $metaData;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
+        $this->reasoningContent = $reasoningContent;
     }
 
     /**
@@ -158,8 +170,57 @@ class Message
             $data['chat_id'] ?? null,
             $data['meta_data'] ?? null,
             isset($data['created_at']) ? (int) $data['created_at'] : null,
-            isset($data['updated_at']) ? (int) $data['updated_at'] : null
+            isset($data['updated_at']) ? (int) $data['updated_at'] : null,
+            $data['reasoning_content'] ?? null
         );
+    }
+
+    /**
+     * Check if this is a function call message
+     */
+    public function isFunctionCall(): bool
+    {
+        return $this->type === self::TYPE_FUNCTION_CALL;
+    }
+
+    /**
+     * Check if this is a tool response message
+     */
+    public function isToolResponse(): bool
+    {
+        return $this->type === self::TYPE_TOOL_RESPONSE;
+    }
+
+    /**
+     * Check if this is an answer message
+     */
+    public function isAnswer(): bool
+    {
+        return $this->type === self::TYPE_ANSWER;
+    }
+
+    /**
+     * Check if this is a follow-up suggestion message
+     */
+    public function isFollowUp(): bool
+    {
+        return $this->type === self::TYPE_FOLLOW_UP;
+    }
+
+    /**
+     * Check if this is a verbose (debug/internal) message
+     */
+    public function isVerbose(): bool
+    {
+        return $this->type === self::TYPE_VERBOSE;
+    }
+
+    /**
+     * Check if this message has reasoning content (deep thinking)
+     */
+    public function hasReasoningContent(): bool
+    {
+        return !empty($this->reasoningContent);
     }
 
     /**
@@ -179,7 +240,9 @@ class Message
             'meta_data' => $this->metaData,
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
+            'reasoning_content' => $this->reasoningContent,
         ], function ($v) {
-            return $v !== null; });
+            return $v !== null;
+        });
     }
 }

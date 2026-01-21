@@ -15,6 +15,7 @@ A PHP SDK for the Coze API. This SDK provides a convenient way to integrate Coze
 - 🔄 Automatic polling for chat completion
 - ⚡ Built on GuzzleHttp for reliable HTTP requests
 - 📦 PSR-4 autoloading, ready for Packagist
+- 🎯 PHP Generator pattern (`yield $event`) for memory-efficient streaming
 
 ## Requirements
 
@@ -46,73 +47,34 @@ Or add to your `composer.json`:
 use Coze\CozeClient;
 use Coze\Auth\TokenAuth;
 
-// Get your access token from https://www.coze.cn/open/oauth/pats
-$token = 'your_access_token';
-
-// Initialize the client (defaults to api.coze.cn)
 $client = new CozeClient(
-    new TokenAuth($token),
+    new TokenAuth('your_access_token'),
     CozeClient::BASE_URL_CN  // or CozeClient::BASE_URL_COM for global
 );
 ```
 
-### Streaming Chat
+### Chat Examples
 
-```php
-use Coze\Models\Message;
-use Coze\Chat\ChatEventType;
+| Example | Method | Description |
+|---------|--------|-------------|
+| [chat_stream.php](./examples/chat_stream.php) | `$client->chat->stream()` | Streaming chat using PHP Generator (`yield`), memory-efficient for large responses |
+| [chat_no_stream.php](./examples/chat_no_stream.php) | `$client->chat->create()` | Non-streaming chat, returns complete response |
+| [chat_poll.php](./examples/chat_poll.php) | `$client->chat->createAndPoll()` | Auto-polling until chat completion |
+| [chat_with_conversation.php](./examples/chat_with_conversation.php) | `$client->chat->create()` | Chat with conversation context |
 
-$stream = $client->chat->stream([
-    'bot_id' => 'your_bot_id',
-    'user_id' => 'user_123',
-    'additional_messages' => [
-        Message::buildUserQuestionText('Hello, how are you?'),
-    ],
-]);
+### Conversation & Message Examples
 
-foreach ($stream as $event) {
-    if ($event->event === ChatEventType::CONVERSATION_MESSAGE_DELTA) {
-        echo $event->message->content;
-    }
-    if ($event->event === ChatEventType::CONVERSATION_CHAT_COMPLETED) {
-        echo "\nToken usage: " . $event->chat->usage->tokenCount . "\n";
-    }
-}
-```
+| Example | Description |
+|---------|-------------|
+| [conversation_crud.php](./examples/conversation_crud.php) | Create, retrieve, list, and clear conversations |
+| [message_crud.php](./examples/message_crud.php) | Create, retrieve, list, update, and delete messages |
 
-### Non-Streaming Chat
+### Dataset Examples
 
-```php
-use Coze\Models\Message;
-
-$response = $client->chat->create([
-    'bot_id' => 'your_bot_id',
-    'user_id' => 'user_123',
-    'additional_messages' => [
-        Message::buildUserQuestionText('Hello!'),
-    ],
-]);
-
-print_r($response);
-```
-
-### Chat with Auto-Polling
-
-```php
-use Coze\Models\Message;
-
-// Create chat and automatically poll until completion
-$chat = $client->chat->createAndPoll([
-    'bot_id' => 'your_bot_id',
-    'user_id' => 'user_123',
-    'additional_messages' => [
-        Message::buildUserQuestionText('What is the weather today?'),
-    ],
-]);
-
-echo "Status: " . $chat->status . "\n";
-echo "Token usage: " . $chat->usage->tokenCount . "\n";
-```
+| Example | Description |
+|---------|-------------|
+| [dataset_crud.php](./examples/dataset_crud.php) | Create, list, update, and delete datasets (knowledge bases) |
+| [document_crud.php](./examples/document_crud.php) | Create, list, update, and delete documents in datasets |
 
 ## API Reference
 
@@ -385,19 +347,6 @@ try {
     echo "SDK Error: " . $e->getMessage() . "\n";
 }
 ```
-
-## Examples
-
-See the [examples](./examples) directory for more usage examples:
-
-- [Streaming Chat](./examples/chat_stream.php)
-- [Non-Streaming Chat](./examples/chat_no_stream.php)
-- [Polling Chat](./examples/chat_poll.php)
-- [Chat with Conversation](./examples/chat_with_conversation.php)
-- [Conversation CRUD](./examples/conversation_crud.php)
-- [Message CRUD](./examples/message_crud.php)
-- [Dataset CRUD](./examples/dataset_crud.php)
-- [Document CRUD](./examples/document_crud.php)
 
 ## Environment Variables
 

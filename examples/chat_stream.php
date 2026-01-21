@@ -3,7 +3,14 @@
 /**
  * Coze PHP SDK - Streaming Chat Example
  *
- * This example demonstrates how to use the Coze SDK for streaming chat.
+ * This example demonstrates how to use the Coze SDK for streaming chat,
+ * including handling different message types:
+ * - answer: Regular response content
+ * - function_call: Tool/function calls made by the assistant
+ * - tool_response: Responses from tool/function calls
+ * - follow_up: Suggested follow-up questions
+ * - verbose: Debug/internal messages (e.g., knowledge recall)
+ * - reasoning_content: Deep thinking content (for reasoning models)
  */
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -36,10 +43,13 @@ try {
         'bot_id' => $botId,
         'user_id' => $userId,
         'additional_messages' => [
-            Message::buildUserQuestionText('介绍下江苏省造业贷款财政贴息实施细则政策呢'),
+            Message::buildUserQuestionText('介绍下医沛生公司'),
         ],
         'auto_save_history' => true,
     ]);
+
+    // Collect follow-up suggestions
+    $followUpSuggestions = [];
 
     // Process streaming events
     foreach ($stream as $event) {
@@ -49,14 +59,70 @@ try {
                 echo "[Chat Created] ID: " . $chatId . "\n";
                 break;
 
+            case ChatEventType::CONVERSATION_CHAT_IN_PROGRESS:
+                echo "[Chat In Progress]\n";
+                break;
+
             case ChatEventType::CONVERSATION_MESSAGE_DELTA:
-                // Print message content incrementally
-                $content = ($event->message !== null) ? $event->message->content : '';
-                echo $content;
+                // Handle streaming message delta
+                if ($event->message !== null) {
+                    // Check for reasoning content (deep thinking)
+                    if ($event->message->hasReasoningContent()) {
+                        // Reasoning content - typically shown in a separate area or collapsed
+                        echo "\033[90m" . $event->message->reasoningContent . "\033[0m"; // Gray color for reasoning
+                    }
+
+                    // Regular content output
+                    if (!empty($event->message->content)) {
+                        echo $event->message->content;
+                    }
+                }
                 break;
 
             case ChatEventType::CONVERSATION_MESSAGE_COMPLETED:
-                echo "\n[Message Completed]\n";
+                // Handle completed messages based on type
+                if ($event->message !== null) {
+                    $message = $event->message;
+
+                    switch ($message->type) {
+                        case Message::TYPE_ANSWER:
+                            // Final answer message completed
+                            echo "\n[Answer Completed]\n";
+                            break;
+
+                        case Message::TYPE_FUNCTION_CALL:
+                            // Function/tool call - parse the content for details
+                            echo "\n[Function Call]\n";
+                            $callData = json_decode($message->content, true);
+                            if ($callData) {
+                                echo "  Plugin: " . ($callData['plugin'] ?? 'N/A') . "\n";
+                                echo "  API: " . ($callData['api_name'] ?? 'N/A') . "\n";
+                                echo "  Arguments: " . json_encode($callData['arguments'] ?? [], JSON_UNESCAPED_UNICODE) . "\n";
+                            }
+                            break;
+
+                        case Message::TYPE_TOOL_RESPONSE:
+                            // Tool response - show the result
+                            echo "[Tool Response]\n";
+                            // Optionally parse and display the response
+                            $responseData = json_decode($message->content, true);
+                            if ($responseData && is_array($responseData)) {
+                                echo "  Results: " . count($responseData) . " item(s)\n";
+                            }
+                            break;
+
+                        case Message::TYPE_FOLLOW_UP:
+                            // Collect follow-up suggestions to show at the end
+                            $followUpSuggestions[] = $message->content;
+                            break;
+
+                        case Message::TYPE_VERBOSE:
+                            // Verbose/debug messages - usually hidden or logged
+                            // Uncomment to see verbose messages:
+                            // echo "[Verbose] " . substr($message->content, 0, 100) . "...\n";
+                            break;
+                    }
+                }
                 break;
 
             case ChatEventType::CONVERSATION_CHAT_COMPLETED:
@@ -66,6 +132,14 @@ try {
                     echo "Token Usage: " . $event->chat->usage->tokenCount . "\n";
                     echo "  - Input: " . $event->chat->usage->inputCount . "\n";
                     echo "  - Output: " . $event->chat->usage->outputCount . "\n";
+                }
+
+                // Show follow-up suggestions
+                if (!empty($followUpSuggestions)) {
+                    echo "\nSuggested Follow-ups:\n";
+                    foreach ($followUpSuggestions as $index => $suggestion) {
+                        echo "  " . ($index + 1) . ". " . $suggestion . "\n";
+                    }
                 }
                 break;
 

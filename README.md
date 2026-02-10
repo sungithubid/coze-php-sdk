@@ -76,6 +76,13 @@ $client = new CozeClient(
 | [dataset_crud.php](./examples/dataset_crud.php) | Create, list, update, and delete datasets (knowledge bases) |
 | [document_crud.php](./examples/document_crud.php) | Create, list, update, and delete documents in datasets |
 
+### Workflow Examples
+
+| Example | Description |
+|---------|-------------|
+| [workflow_run.php](./examples/workflow_run.php) | Execute a workflow with non-streaming output |
+| [workflow_stream.php](./examples/workflow_stream.php) | Execute a workflow with streaming output (SSE) |
+
 ## API Reference
 
 ### CozeClient
@@ -370,8 +377,8 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## TODO
 
 - [x] **Conversations**
+- [x] **Workflows**
 - [ ] **Bots**
-- [ ] **Workflows**
 - [ ] **Workspaces**
 - [ ] **Files**
 - [ ] **Apps**

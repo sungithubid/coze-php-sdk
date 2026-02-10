@@ -58,6 +58,9 @@ try {
         'dataset_id' => (int) $datasetId,
         'document_bases' => $documentBases,
         'format_type' => DocumentFormatType::DOCUMENT,
+        'chunk_strategy' => [
+            'chunk_type' => 0,  // 0 = 自动分块和清洗 chunk_strategy 首次上传时必填，后续上传可省略
+        ],
     ]);
 
     $documentIds = [];
